@@ -1,20 +1,28 @@
 package com.alura.kafka.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.alura.kafka.config.ConsumidorKafka;
+import com.alura.kafka.config.ProdutorKafka;
+import com.alura.kafka.request.dto.ProdutoRequest;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 @RestController
 public class PedidoController {
 
 	@Autowired
-	KafkaTemplate<String, String> kafka;
+	ProdutorKafka produtorKafka;
+	
+	@Autowired
+	ConsumidorKafka consumidor;
 	
 	@GetMapping(value = "/novoPedido")
-	public String novoPedido() {
+	public String novoPedido(@RequestBody ProdutoRequest request) throws JsonProcessingException {
 		
-		kafka.send("loja_novo_pedido", "Novo produto");
+		produtorKafka.enviarMensagemNovoPedido(request);
 		
 		return "Deu certo";
 	}
