@@ -17,6 +17,10 @@ public class ProdutorKafka {
 	public void enviarMensagemNovoPedido(ProdutoRequest request) throws JsonProcessingException {
 		kafka.send("loja_novo_pedido", new ObjectMapper().writeValueAsString(request));
 	}
+	
+	public void enviarMensagemFraude(ProdutoRequest request) throws JsonProcessingException {
+		kafka.send("fraude", new ObjectMapper().writeValueAsString(request));
+	}
 
 	
 }
