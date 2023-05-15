@@ -24,4 +24,13 @@ O Spring ja faz a distribuição das partiçõs por consumer.
 
 > bin/windows/kafka-topics.bat --bootstrap-server localhost:9092 --describe
 
+### Sobre armazenamento de logs/registros
+
+Todos os logs/registros são configurados por default em uma pasta temporaria.
+
+Podemos mudar para um diretório onde serão armazenados de fato modificando os seguintes arquivos:
+
+* server.properties
+* zookeeper.properties
+
 
