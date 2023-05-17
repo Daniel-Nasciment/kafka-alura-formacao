@@ -16,7 +16,7 @@ public class GerenciadorDeKeyService {
 		
 		int cont = 0;
 		
-		while(cont <= 100) {
+		while(cont <= 5) {
 			
 			LocalDate now = LocalDate.now();
 			double random = Math.random();
