@@ -21,6 +21,14 @@ public class ProdutorKafka {
 	public void enviarMensagemFraude(ProdutoRequest request) throws JsonProcessingException {
 		kafka.send("fraude", new ObjectMapper().writeValueAsString(request));
 	}
+	
+	public void enviarTopicoParaProcessamentoDeKeys() {
+		kafka.send("processar_tudo", "imprimir_chave");
+	}
+	
+	public void enviarOrderDeImpressaoDeKey(String topic, String key) {
+		kafka.send(topic, key);
+	}
 
 	
 }

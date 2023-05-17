@@ -26,6 +26,14 @@ public class PedidoController {
 		
 		return "Deu certo";
 	}
+	
+	@GetMapping(value = "/key")
+	public String geradorKey() throws JsonProcessingException {
+		
+		produtorKafka.enviarTopicoParaProcessamentoDeKeys();
+		
+		return "Deu certo";
+	}
 
 	
 }
