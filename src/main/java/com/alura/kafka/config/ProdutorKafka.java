@@ -1,12 +1,18 @@
 package com.alura.kafka.config;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+
+import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.common.header.Header;
+import org.apache.kafka.common.header.internals.RecordHeader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.messaging.Message;
-import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Component;
 
 import com.alura.kafka.request.dto.ProdutoRequest;
@@ -23,18 +29,21 @@ public class ProdutorKafka {
 	
 	public void enviarMensagemNovoPedido(ProdutoRequest request) throws JsonProcessingException {
 	
-		String traceId = MDC.get("traceId");
 		
-	    Message<String> message = MessageBuilder
-	            .withPayload(new ObjectMapper().writeValueAsString(request))
-	            .setHeader("traceId", traceId)
-	            .build();
-	    
-		kafka.send("loja_novo_pedido", message.getPayload());
+		
+		List<Header> lista = new ArrayList<>();
+		Header header = new RecordHeader("traceId", MDC.get("traceId").getBytes());
+		lista.add(header);
+		Iterable<Header> iterable = lista;
+		
+		
+		kafka.send(new ProducerRecord<String, String>("loja_novo_pedido", null, null, null, new ObjectMapper().writeValueAsString(request), iterable));
+		
+		//kafka.send("loja_novo_pedido",new ObjectMapper().writeValueAsString(request));
 	}
 	
-	public void enviarMensagemFraude(ProdutoRequest request) throws JsonProcessingException {
-		kafka.send("fraude", new ObjectMapper().writeValueAsString(request));
+	public void enviarMensagemFraude(ProdutoRequest request) throws JsonProcessingException, InterruptedException, ExecutionException {
+		kafka.send("fraude", new ObjectMapper().writeValueAsString(request)).get();
 	}
 	
 	public void enviarTopicoParaProcessamentoDeKeys() {

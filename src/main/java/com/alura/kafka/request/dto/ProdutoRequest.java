@@ -3,6 +3,8 @@ package com.alura.kafka.request.dto;
 import java.time.LocalDateTime;
 import java.util.Date;
 
+import org.slf4j.MDC;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class ProdutoRequest {
@@ -13,6 +15,9 @@ public class ProdutoRequest {
 	private String nome;
 	
 	private boolean simularFraude = false;
+	
+	@JsonIgnore
+	private String trace = MDC.get("traceId");
 	
 	/* A biblioteca do jacks com LocalDateTime da problema para serializar, e com LocalDate, da problema para desserializar */
 	private String dataPedido = LocalDateTime.now().toString();
@@ -31,6 +36,11 @@ public class ProdutoRequest {
 	
 	public boolean isSimularFraude() {
 		return simularFraude;
+	}
+	
+	public String getTrace() {
+		System.out.println("===============TRACE "+ this.trace +"================");
+		return trace;
 	}
 	
 }
