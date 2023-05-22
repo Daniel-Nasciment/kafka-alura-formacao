@@ -30,9 +30,12 @@ public class ProdutorKafka {
 	public void enviarMensagemNovoPedido(ProdutoRequest request) throws JsonProcessingException {
 	
 		
+		MDC.get("traceId");
+		
+		String id = ProdutorKafka.class.getSimpleName() + "_" + MDC.get("traceId"); 
 		
 		List<Header> lista = new ArrayList<>();
-		Header header = new RecordHeader("traceId", MDC.get("traceId").getBytes());
+		Header header = new RecordHeader("traceId", id.getBytes());
 		lista.add(header);
 		Iterable<Header> iterable = lista;
 		
